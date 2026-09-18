@@ -1,0 +1,80 @@
+1. service
+CREATE TABLE services (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL UNIQUE,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+2.user
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role ENUM('admin', 'vendor', 'employee', 'user')
+        NOT NULL DEFAULT 'user',
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL UNIQUE,
+    address VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
+);
+
+3.Vendor
+
+CREATE TABLE vendors (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+    name VARCHAR(150) NOT NULL,
+    address VARCHAR(255) DEFAULT NULL,
+    number VARCHAR(20) DEFAULT NULL,
+    service_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES services(id)
+);
+
+4. service_posts
+
+CREATE TABLE service_posts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+user_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    location VARCHAR(255) DEFAULT NULL,
+    budget DECIMAL(10,2) DEFAULT NULL,
+    status ENUM(
+        'open',
+        'in_progress',
+        'completed',
+        'cancelled'
+    ) NOT NULL DEFAULT 'open',
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+//5.Vendor service service_posts
+
+CREATE TABLE vendor_service_posts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    vendor_id BIGINT UNSIGNED NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    location VARCHAR(255) DEFAULT NULL,
+    price DECIMAL(10,2) DEFAULT NULL,
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE
+);
