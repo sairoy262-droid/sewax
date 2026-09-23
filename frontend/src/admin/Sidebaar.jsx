@@ -89,9 +89,9 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#0B0B0F] transition-transform duration-300 lg:sticky lg:top-0 lg:z-30 lg:translate-x-0 ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#0B0B0F] transition-transform duration-300
+  ${open ? "translate-x-0" : "-translate-x-full"}
+  lg:sticky lg:top-20 lg:z-30 lg:h-[calc(100vh-80px)] lg:w-72 lg:flex-shrink-0 lg:translate-x-0`}
       >
         {/* Logo */}
         <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
@@ -138,9 +138,7 @@ const Sidebar = () => {
                 Welcome User
               </h3>
 
-              <p className="mt-0.5 text-xs text-slate-500">
-                SewaX Account
-              </p>
+              <p className="mt-0.5 text-xs text-slate-500">SewaX Account</p>
             </div>
           </div>
         </div>
@@ -177,9 +175,7 @@ const Sidebar = () => {
                       }
                     />
 
-                    <span className="text-sm font-semibold">
-                      {item.title}
-                    </span>
+                    <span className="text-sm font-semibold">{item.title}</span>
                   </div>
 
                   {active && <ChevronRight size={16} />}
@@ -219,9 +215,7 @@ const Sidebar = () => {
                       }
                     />
 
-                    <span className="text-sm font-semibold">
-                      {item.title}
-                    </span>
+                    <span className="text-sm font-semibold">{item.title}</span>
                   </div>
 
                   {active && <ChevronRight size={16} />}

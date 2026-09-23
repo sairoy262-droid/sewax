@@ -1,16 +1,27 @@
 import { Outlet } from "react-router-dom";
-import Header from "../Components/Header";
 import Sidebar from "../admin/Sidebaar";
+import Header from "../Components/Header";
 
-const Privatelayout = () => {
+
+const Privatelayouts = () => {
   return (
-    <div>
- 
-<Header/>
-<Sidebar/>
-      <Outlet />
+    <div className="min-h-screen bg-[#0B0B0F] text-white">
+      {/* Top Header */}
+      <Header />
+
+      <div className="flex">
+        {/* Left Sidebar */}
+        <Sidebar />
+
+        {/* Dashboard / Page Content */}
+        <main className="min-w-0 flex-1">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
 
-export default Privatelayout;
+export default Privatelayouts;
+
+
