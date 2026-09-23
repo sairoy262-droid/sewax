@@ -74,7 +74,7 @@ export const LoginUsers = async (req, res) => {
     httpOnly: true,
     secure: false,
     sameSite: "lax",
-    maxAGE: 7 * 24 * 60 * 60 * 100,
+    maxAge: 7 * 24 * 60 * 60 * 100,
   });
 
   res.status(200).json({
