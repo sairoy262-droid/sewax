@@ -9,15 +9,7 @@ export const Publicroute = {
     {
       path: "/",
       element: <Center />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/register",
-      element: <Register />,
-    },
+    }
    
   ],
 };

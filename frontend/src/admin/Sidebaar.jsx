@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   BriefcaseBusiness,
@@ -14,11 +14,22 @@ import {
   X,
   ChevronRight,
 } from "lucide-react";
+import LogoutModal from "./LogoutModal";
 
 const Sidebar = () => {
+    const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-
+ const Confirm = () => {
+   try {
+    
+     localStorage.removeItem("token");
+     navigate("/");
+     
+   } catch (error) {
+     console.error("Logout failed:", error);
+   }
+ };
   const menuItems = [
     {
       title: "Dashboard",
@@ -125,24 +136,6 @@ const Sidebar = () => {
             <X size={21} />
           </button>
         </div>
-
-        {/* User Profile */}
-        <div className="mx-4 mt-6 rounded-2xl border border-white/10 bg-[#111217] p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#2563EB]/10">
-              <UserRound size={20} className="text-[#2563EB]" />
-            </div>
-
-            <div className="min-w-0">
-              <h3 className="truncate text-sm font-bold text-white">
-                Welcome User
-              </h3>
-
-              <p className="mt-0.5 text-xs text-slate-500">SewaX Account</p>
-            </div>
-          </div>
-        </div>
-
         {/* Navigation */}
         <div className="mt-7 flex-1 overflow-y-auto px-4">
           <p className="mb-3 px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-600">
@@ -227,7 +220,10 @@ const Sidebar = () => {
 
         {/* Logout */}
         <div className="border-t border-white/10 p-4">
-          <button className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-slate-400 transition hover:bg-red-400/10 hover:text-red-400">
+          <button
+            onClick={() => setOpen(true)}
+            className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-slate-400 transition hover:bg-red-400/10 hover:text-red-400"
+          >
             <LogOut
               size={19}
               className="text-slate-500 transition group-hover:text-red-400"
@@ -241,6 +237,11 @@ const Sidebar = () => {
           </p>
         </div>
       </aside>
+      {open && <div>
+        <LogoutModal
+        onClose={()=>setOpen(false)}
+        onConfirm={Confirm}
+      /></div>}
     </>
   );
 };
