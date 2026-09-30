@@ -14,22 +14,79 @@ import {
   X,
   ChevronRight,
 } from "lucide-react";
+import { toast } from "react-toastify";
+
 import LogoutModal from "./LogoutModal";
+import { useLogoutMutation } from "../redux/feature/user";
 
 const Sidebar = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
+
+  // Mobile sidebar state
   const [open, setOpen] = useState(false);
- const Confirm = () => {
-   try {
-    
-     localStorage.removeItem("token");
-     navigate("/");
-     
-   } catch (error) {
-     console.error("Logout failed:", error);
-   }
- };
+
+  // Logout modal state
+  const [logoutOpen, setLogoutOpen] = useState(false);
+
+  // Logout API
+  const [
+    logout,
+    {
+      isLoading,
+      isError,
+      error,
+    },
+  ] = useLogoutMutation();
+
+  // =========================
+  // Logout Confirmation
+  // =========================
+  const Confirm = async () => {
+    try {
+      // Call logout API
+      const res = await logout().unwrap();
+
+      // Remove stored user data
+      localStorage.removeItem("user");
+
+      // Remove token if stored in localStorage
+      localStorage.removeItem("token");
+
+      // Remove refresh token if used
+      localStorage.removeItem("refreshToken");
+
+      // Clear session storage
+      sessionStorage.clear();
+
+      // Show success message
+      toast.success(
+        res?.message || "Logout successful"
+      );
+
+      // Close logout modal
+      setLogoutOpen(false);
+
+      // Close mobile sidebar
+      setOpen(false);
+
+      // Redirect to home/login
+      navigate("/", {
+        replace: true,
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+
+      toast.error(
+        error?.data?.message ||
+          "Logout failed. Please try again."
+      );
+    }
+  };
+
+  // =========================
+  // Main Menu
+  // =========================
   const menuItems = [
     {
       title: "Dashboard",
@@ -39,30 +96,38 @@ const Sidebar = () => {
     {
       title: "Services",
       icon: BriefcaseBusiness,
-      path: "/dashboard/services",
+      path: "/services",
+    },
+    {
+      title: "Requested Vendor",
+      icon: BriefcaseBusiness,
+      path: "/RequestedVendors",
     },
     {
       title: "Vendors",
       icon: Users,
-      path: "/dashboard/vendors",
+      path: "/vendors",
     },
     {
       title: "Service Requests",
       icon: ClipboardList,
-      path: "/dashboard/requests",
+      path: "/requests",
     },
     {
       title: "Completed Jobs",
       icon: CheckCircle2,
-      path: "/dashboard/completed",
+      path: "/completed",
     },
     {
       title: "Pending Requests",
       icon: Clock3,
-      path: "/dashboard/pending",
+      path: "/pending",
     },
   ];
 
+  // =========================
+  // Account Menu
+  // =========================
   const bottomItems = [
     {
       title: "Profile",
@@ -76,21 +141,28 @@ const Sidebar = () => {
     },
   ];
 
+  // =========================
+  // Active Route
+  // =========================
   const isActive = (path) => {
     return location.pathname === path;
   };
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* =========================================
+          MOBILE MENU BUTTON
+      ========================================= */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed left-4 top-24 z-40 rounded-xl border border-white/10 bg-[#111217] p-3 text-white shadow-lg lg:hidden"
+        className="fixed left-4 top-24 z-40 rounded-xl border border-white/10 bg-[#111217] p-3 text-white shadow-lg transition hover:border-[#F5C542]/40 hover:text-[#F5C542] lg:hidden"
       >
         <Menu size={21} />
       </button>
 
-      {/* Mobile Overlay */}
+      {/* =========================================
+          MOBILE OVERLAY
+      ========================================= */}
       {open && (
         <div
           onClick={() => setOpen(false)}
@@ -98,16 +170,33 @@ const Sidebar = () => {
         />
       )}
 
-      {/* Sidebar */}
+      {/* =========================================
+          SIDEBAR
+      ========================================= */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#0B0B0F] transition-transform duration-300
-  ${open ? "translate-x-0" : "-translate-x-full"}
-  lg:sticky lg:top-20 lg:z-30 lg:h-[calc(100vh-80px)] lg:w-72 lg:flex-shrink-0 lg:translate-x-0`}
+        className={`
+          fixed left-0 top-0 z-50 flex h-screen w-72
+          flex-col border-r border-white/10
+          bg-[#0B0B0F]
+          transition-transform duration-300
+
+          ${open ? "translate-x-0" : "-translate-x-full"}
+
+          lg:sticky
+          lg:top-20
+          lg:z-30
+          lg:h-[calc(100vh-80px)]
+          lg:w-72
+          lg:flex-shrink-0
+          lg:translate-x-0
+        `}
       >
-        {/* Logo */}
+        {/* =========================================
+            LOGO
+        ========================================= */}
         <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
           <Link
-            to="/dashboard"
+            to="/"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3"
           >
@@ -119,7 +208,10 @@ const Sidebar = () => {
             {/* Logo Text */}
             <div>
               <h1 className="text-xl font-black tracking-wide">
-                SEWA<span className="text-[#F5C542]">X</span>
+                SEWA
+                <span className="text-[#F5C542]">
+                  X
+                </span>
               </h1>
 
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">
@@ -136,12 +228,18 @@ const Sidebar = () => {
             <X size={21} />
           </button>
         </div>
-        {/* Navigation */}
+
+        {/* =========================================
+            NAVIGATION
+        ========================================= */}
         <div className="mt-7 flex-1 overflow-y-auto px-4">
+
+          {/* Main Menu Title */}
           <p className="mb-3 px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-600">
             Main Menu
           </p>
 
+          {/* Main Navigation */}
           <nav className="space-y-1.5">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -152,11 +250,16 @@ const Sidebar = () => {
                   key={item.title}
                   to={item.path}
                   onClick={() => setOpen(false)}
-                  className={`group flex items-center justify-between rounded-xl px-3 py-3 transition ${
-                    active
-                      ? "bg-[#F5C542] text-[#0B0B0F]"
-                      : "text-slate-400 hover:bg-[#111217] hover:text-white"
-                  }`}
+                  className={`
+                    group flex items-center justify-between
+                    rounded-xl px-3 py-3 transition
+
+                    ${
+                      active
+                        ? "bg-[#F5C542] text-[#0B0B0F]"
+                        : "text-slate-400 hover:bg-[#111217] hover:text-white"
+                    }
+                  `}
                 >
                   <div className="flex items-center gap-3">
                     <Icon
@@ -164,20 +267,26 @@ const Sidebar = () => {
                       className={
                         active
                           ? "text-[#0B0B0F]"
-                          : "text-slate-500 group-hover:text-[#F5C542]"
+                          : "text-slate-500 transition group-hover:text-[#F5C542]"
                       }
                     />
 
-                    <span className="text-sm font-semibold">{item.title}</span>
+                    <span className="text-sm font-semibold">
+                      {item.title}
+                    </span>
                   </div>
 
-                  {active && <ChevronRight size={16} />}
+                  {active && (
+                    <ChevronRight size={16} />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Account */}
+          {/* =========================================
+              ACCOUNT
+          ========================================= */}
           <p className="mb-3 mt-8 px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-600">
             Account
           </p>
@@ -192,11 +301,16 @@ const Sidebar = () => {
                   key={item.title}
                   to={item.path}
                   onClick={() => setOpen(false)}
-                  className={`group flex items-center justify-between rounded-xl px-3 py-3 transition ${
-                    active
-                      ? "bg-[#F5C542] text-[#0B0B0F]"
-                      : "text-slate-400 hover:bg-[#111217] hover:text-white"
-                  }`}
+                  className={`
+                    group flex items-center justify-between
+                    rounded-xl px-3 py-3 transition
+
+                    ${
+                      active
+                        ? "bg-[#F5C542] text-[#0B0B0F]"
+                        : "text-slate-400 hover:bg-[#111217] hover:text-white"
+                    }
+                  `}
                 >
                   <div className="flex items-center gap-3">
                     <Icon
@@ -204,32 +318,55 @@ const Sidebar = () => {
                       className={
                         active
                           ? "text-[#0B0B0F]"
-                          : "text-slate-500 group-hover:text-[#F5C542]"
+                          : "text-slate-500 transition group-hover:text-[#F5C542]"
                       }
                     />
 
-                    <span className="text-sm font-semibold">{item.title}</span>
+                    <span className="text-sm font-semibold">
+                      {item.title}
+                    </span>
                   </div>
 
-                  {active && <ChevronRight size={16} />}
+                  {active && (
+                    <ChevronRight size={16} />
+                  )}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        {/* Logout */}
+        {/* =========================================
+            LOGOUT
+        ========================================= */}
         <div className="border-t border-white/10 p-4">
+
           <button
-            onClick={() => setOpen(true)}
-            className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-slate-400 transition hover:bg-red-400/10 hover:text-red-400"
+            onClick={() => setLogoutOpen(true)}
+            disabled={isLoading}
+            className="
+              group flex w-full items-center gap-3
+              rounded-xl px-3 py-3
+              text-slate-400
+              transition
+              hover:bg-red-400/10
+              hover:text-red-400
+              disabled:cursor-not-allowed
+              disabled:opacity-50
+            "
           >
             <LogOut
               size={19}
-              className="text-slate-500 transition group-hover:text-red-400"
+              className="
+                text-slate-500
+                transition
+                group-hover:text-red-400
+              "
             />
 
-            <span className="text-sm font-semibold">Logout</span>
+            <span className="text-sm font-semibold">
+              {isLoading ? "Logging out..." : "Logout"}
+            </span>
           </button>
 
           <p className="mt-3 text-center text-[10px] text-slate-600">
@@ -237,11 +374,16 @@ const Sidebar = () => {
           </p>
         </div>
       </aside>
-      {open && <div>
+
+      {/* =========================================
+          LOGOUT MODAL
+      ========================================= */}
+      {logoutOpen && (
         <LogoutModal
-        onClose={()=>setOpen(false)}
-        onConfirm={Confirm}
-      /></div>}
+          onClose={() => setLogoutOpen(false)}
+          onConfirm={Confirm}
+        />
+      )}
     </>
   );
 };

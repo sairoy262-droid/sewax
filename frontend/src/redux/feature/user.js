@@ -15,6 +15,25 @@ export const register = indexslice.injectEndpoints({
         body: data,
       }),
     }),
+    logout: builder.mutation({
+      query: (data) => ({
+        url: "/user/logout-user",
+        method: "Post",
+        body: data,
+      }),
+    }),
+    getUser: builder.query({
+      query: (data) => ({
+        url: "/user/get-user",
+        method: "Get",
+        body: data,
+      }),
+    }),
   }),
 });
-export const { useRegisterMutation, useLoginMutation } = register;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useGetUserQuery,
+} = register;

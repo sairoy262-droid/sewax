@@ -8,10 +8,10 @@ import {
   BriefcaseBusiness,
   ChevronDown,
 } from "lucide-react";
-import { useServiceQuery } from "../redux/feature/Services";
+import { useServiceGetQuery } from "../redux/feature/Services";
 
 const ModalOpen = ({ onSubmit, onClose }) => {
-  const { data, isLoading } = useServiceQuery();
+  const { data, isLoading } = useServiceGetQuery();
 
   const [formData, setFormData] = useState({
     name: "",

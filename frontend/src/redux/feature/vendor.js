@@ -8,6 +8,13 @@ export const Vendor = indexslice.injectEndpoints({
         method: "Get",
       }),
     }),
+    VendorUpdate: builder.mutation({
+      query: (data) => ({
+        url: "/vendor/update-vendor/",
+        method: "Patch",
+        body:data,
+      }),
+    }),
   }),
 });
-export const { useVendorGetQuery } = Vendor;
+export const { useVendorGetQuery,useVendorUpdateMutation} = Vendor;

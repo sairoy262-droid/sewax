@@ -3,7 +3,7 @@ import { indexslice } from ".";
 
 export const Service = indexslice.injectEndpoints({
   endpoints: (builder) => ({
-    Service: builder.query({
+    ServiceGet: builder.query({
       query: () => ({
         url: "/Services/get-services",
         method: "Get",
@@ -11,4 +11,4 @@ export const Service = indexslice.injectEndpoints({
     }),
   }),
 });
- export const {useServiceQuery}= Service;
+ export const {useServiceGetQuery}= Service;

@@ -9,11 +9,13 @@ import {
   BriefcaseBusiness,
   UserRound,
 } from "lucide-react";
-import { useVendorGetQuery } from "../redux/feature/vendor";
+import {  useVendorGetQuery } from "../redux/feature/vendor";
 import ModalOpen from "./Modal";
 
 const Vendor = () => {
   const { data, isLoading, isError, error } = useVendorGetQuery();
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [modalopen, setModalOpen] = useState(false);
   if (isLoading) {
     return (
@@ -68,14 +70,16 @@ const Vendor = () => {
               <span className="text-[#F5C542]"> vendors</span>
             </h1>
 
-            <div className="absolute right-0 top-0">
-              <button
-                onClick={() => setModalOpen(true)}
-                className="rounded-xl border-2 border-[#F5C542] bg-[#F5C542] px-5 py-3 font-semibold text-black shadow-lg transition hover:bg-[#d9ad2f]"
-              >
-                + Add Vendor
-              </button>
-            </div>
+            {user?.role === "admin" && (
+              <div className="absolute right-0 top-0">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="rounded-xl border-2 border-[#F5C542] bg-[#F5C542] px-5 py-3 font-semibold text-black shadow-lg transition hover:bg-[#d9ad2f]"
+                >
+                  + Add Vendor
+                </button>
+              </div>
+            )}
 
             <p className="mt-4 max-w-2xl text-base leading-7 text-gray-400">
               Discover trusted vendors available on SewaX. Explore their
@@ -176,7 +180,7 @@ const Vendor = () => {
 
       {modalopen && (
         <div>
-          <ModalOpen onClose={() => setModalOpen(false)}  />
+          <ModalOpen onClose={() => setModalOpen(false)} />
         </div>
       )}
     </>

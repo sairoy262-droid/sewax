@@ -4,12 +4,9 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
-  Search,
-  UserRound,
   ShieldCheck,
   Zap,
   Users,
-  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,6 +26,7 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
+
 const handlelogin = async (e) => {
   e.preventDefault();
 
@@ -36,15 +34,23 @@ const handlelogin = async (e) => {
     const res = await login(FormData).unwrap();
 
     console.log("LOGIN RESPONSE:", res);
-localStorage.setItem("token", res.token);
-    toast.success(res.message);
+
+    // Store token
+    localStorage.setItem("token", res.token);
+
+    // Store logged-in user
+    localStorage.setItem("user", JSON.stringify(res.user));
+
+    toast.success(res.message || "Login successful");
 
     navigate("/dashboard");
   } catch (err) {
     console.log("LOGIN ERROR:", err);
+
     toast.error(err?.data?.message || "Login failed");
   }
 };
+
   const [showPassword, setShowPassword] = useState(false);
 
   return (

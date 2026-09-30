@@ -10,6 +10,6 @@ import { isAdmin } from "../middleware/isAdmin.js";
 export const Vendor = Express.Router();
 
 Vendor.post("/post-vendor", Islogin, isAdmin, RegisterVendors);
-Vendor.get("/get-vendor", Islogin, isAdmin, GetVendors);
+Vendor.get("/get-vendor", Islogin, GetVendors);
 Vendor.delete("/delete-vendor/:id", Islogin, isAdmin, DeleteVendors);
 Vendor.patch("/update-vendor/:id", Islogin, isAdmin, UpdateVendors);

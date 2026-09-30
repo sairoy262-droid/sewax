@@ -259,38 +259,7 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Role */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">Role</label>
-
-                <div className="relative">
-                  <UserRound
-                    size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                  />
-
-                  <select
-                    name="role"
-                    required
-                    value={formData.role}
-                    onChange={Handlechange}
-                    className="h-11 w-full cursor-pointer appearance-none rounded-xl border border-white/10 bg-[#0B0B0F] pl-11 pr-11 text-sm text-white outline-none transition focus:border-[#F5C542]/60 focus:ring-1 focus:ring-[#F5C542]/20"
-                  >
-                    <option value="user" className="bg-[#111217]">
-                      User
-                    </option>
-
-                    <option value="vendor" className="bg-[#111217]">
-                      Vendor
-                    </option>
-                  </select>
-
-                  <ChevronDown
-                    size={18}
-                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
-                  />
-                </div>
-              </div>
+              
 
               {/* Terms */}
               <label className="flex cursor-pointer items-start gap-2 pt-1 text-xs text-slate-500">
