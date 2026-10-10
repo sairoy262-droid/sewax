@@ -44,7 +44,7 @@ export const GetVendors = async (req, res) => {
     res.send("something went wrong ", error);
   }
 };
-//Delete
+//Delete 
 export const DeleteVendors = async (req, res) => {
   try {
     const  Id = Number(req.params.id);

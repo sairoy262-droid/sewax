@@ -11,6 +11,7 @@ import {
 import { useGetUserQuery } from "../redux/feature/user";
 import ModalOpen from "./Modal";
 
+
 const RequestedVendor = () => {
   const { data: getUser, isLoading, isError, error } = useGetUserQuery();
   const [selectedUser, setSelectedUser] = useState(null);
@@ -265,7 +266,7 @@ const RequestedVendor = () => {
       </div>{" "}
       {/* MODAL */}{" "}
       {selectedUser && (
-        <ModalOpen user={selectedUser} onClose={()=> setSelectedUser(null)} />
+        <ModalOpen user={selectedUser} onClose={() => setSelectedUser(null)} />
       )}{" "}
     </>
   );

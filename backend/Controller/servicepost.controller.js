@@ -11,27 +11,49 @@ import {
 import { generateSlug } from "../Utilities/Generateslug.js";
 
 export const RegisterServicePosts = async (req, res) => {
-  const user_id = req.user.id;
-  const { title, description, location, budget } = req.body;
-  const slug = generateSlug(title);
-  if (!(user_id || !title || !description || !location || !budget || !slug)) {
-    return res
-      .status(400)
-      .json({ message: "The fields are not completly field" });
-  }
-  const result = await RegisterServicePost(
-    user_id,
-    slug,
-    title,
-    description,
-    location,
-    budget,
-  );
-  if (!result) {
-    return res.status(400).json({ message: "error creating service" });
-  }
+  try {
+    const user_id = req.user.id;
+    const { title, description, location, budget } = req.body;
 
-  return res.status(200).json({ message: "Succesfully created" });
+    if (!title || !description ||!location ||!budget) {
+      return res.status(400).json({
+        message: "All fields  are required",
+      });
+    }
+
+    const slug = generateSlug(title);
+
+    const result = await RegisterServicePost(
+      user_id,
+      slug,
+      title,
+      description,
+      location ,
+      budget ,
+    );
+
+    if (!result) {
+      return res.status(400).json({
+        message: "Error creating service",
+      });
+    }
+
+    return res.status(201).json({
+      message: "Successfully created",
+    });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(409).json({
+        message: "A service with the same slug already exists",
+      });
+    }
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 };
 export const GetServicePosts = async (req, res) => {
   try {
@@ -41,6 +63,7 @@ export const GetServicePosts = async (req, res) => {
     }
     return res.status(201).json({ message: "Succesful get post", result });
   } catch (error) {
+
     res.send("something went wrong ", error);
   }
 };
@@ -79,7 +102,7 @@ export const DeleteServicePosts = async (req, res) => {
     }
     return res.status(200).json({ message: "Succesfully deleted" });
   } catch (error) {
-    console.log(error);
+  
     return res.status(400).json({
       message: "something went wrong",
       error: error,

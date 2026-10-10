@@ -8,6 +8,13 @@ export const UserService = indexslice.injectEndpoints({
         method: "Get",
       }),
     }),
+    AddService: builder.mutation({
+      query: (Sdata) => ({
+        url: "/ServicePost/post-Servicepost",
+        method: "Post",
+        body: Sdata,
+      }),
+    }),
   }),
 });
- export const {useUserServiceGetQuery}= UserService;
+export const { useUserServiceGetQuery, useAddServiceMutation } = UserService;
