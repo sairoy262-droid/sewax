@@ -12,8 +12,10 @@ import { useGetUserQuery } from "../redux/feature/user";
 import ModalOpen from "./Modal";
 
 
+
 const RequestedVendor = () => {
   const { data: getUser, isLoading, isError, error } = useGetUserQuery();
+ 
   const [selectedUser, setSelectedUser] = useState(null);
   const users = Array.isArray(getUser)
     ? getUser.filter((user) => user.role === "user")

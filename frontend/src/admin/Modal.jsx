@@ -12,7 +12,7 @@ import { useServiceGetQuery } from "../redux/feature/Services";
 import { toast } from "react-toastify";
 import { useAddVendorMutation } from "../redux/feature/vendor";
 
-const ModalOpen = async({ user, onClose }) => {
+const ModalOpen = ({ user, onClose }) => {
   const {
     data,
     isLoading: servicesLoading,
@@ -29,22 +29,7 @@ const ModalOpen = async({ user, onClose }) => {
     service_id: "",
     user_id: user?.id || "",
   });
-console.log("API BASE URL:", import.meta.env.VITE_API_URL);
-console.log("Submitting vendor with:", {
-  user_id: user.id,
-  name: formData.name,
-  address: formData.address,
-  number: formData.number,
-  service_id: formData.service_id,
-});
 
-const response = await addVendor({
-  user_id: user.id,
-  name: formData.name,
-  address: formData.address,
-  number: formData.number,
-  service_id: formData.service_id,
-}).unwrap();
   const services = Array.isArray(data)
     ? data
     : Array.isArray(data?.services)
@@ -88,23 +73,9 @@ const response = await addVendor({
       toast.success("Vendor registered successfully");
       onClose();
     } catch (error) {
-      console.error("FULL VENDOR ERROR:", error);
-      console.log("Status:", error?.status);
-      console.log("Response:", error?.data);
-      console.log("Request payload:", {
-        user_id: user?.id,
-        name: formData.name,
-        address: formData.address,
-        number: formData.number,
-        service_id: formData.service_id,
-      });
-
+      console.error("Register vendor error:", error);
       toast.error(
-        typeof error?.data === "string"
-          ? error.data.slice(0, 150)
-          : error?.data?.message ||
-              error?.error ||
-              `Request failed: ${error?.status ?? "Unknown error"}`,
+        error?.data?.message || "Failed to register vendor"
       );
     }
   };

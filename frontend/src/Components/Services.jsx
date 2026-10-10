@@ -8,7 +8,7 @@ import {
   Clock3,
 } from "lucide-react";
 import {
-  useAddVendorMutation,
+  useAddVendorServiceMutation,
   useVendorServiceGetQuery,
 } from "../redux/feature/V-services";
 import { useAddServiceMutation, useUserServiceGetQuery } from "../redux/feature/U-Service";
@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 const Services = () => {
   const [activeTab, setActiveTab] = useState("vendor");
  const [Sdata, { isLoading: userAdding }] = useAddServiceMutation(); 
- const [Vdata, { isLoading: vendorAdding }] = useAddVendorMutation();
+ const [Vdata, { isLoading: vendorAdding }] =useAddVendorServiceMutation();
  const user = JSON.parse(localStorage.getItem("user"));
   const [modalopen, setModalOpen] = useState(false);
 const Handlepost = async (formData) => {
