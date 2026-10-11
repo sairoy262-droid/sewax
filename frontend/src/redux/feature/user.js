@@ -29,6 +29,13 @@ export const register = indexslice.injectEndpoints({
         body: data,
       }),
     }),
+    UpdateUser: builder.query({
+      query: (data) => ({
+        url: "/user/get-user",
+        method: "Get",
+        body: data,
+      }),
+    }),
   }),
 });
 export const {

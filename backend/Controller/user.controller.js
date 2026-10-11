@@ -1,4 +1,4 @@
-import { GetUser, LoginUser, RegisterUser } from "../Services/user.service.js";
+import { GetUser, LoginUser, RegisterUser, Updateuser } from "../Services/user.service.js";
 import bycrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -88,3 +88,25 @@ export const logoutuser = (req, res) => {
   res.clearCookie("token");
   res.json({ message: "Logout Success" });
 };
+export const Updateusers =async(req,res)=>{
+  
+   try {
+    
+      const Id = Number(req.params.Id);
+  const fields= req.body;
+  const result = await Updateuser(Id,fields);
+      if (result[0].affectedRows === 0) {
+        return res.status(404).json({
+          message: `Product not found of id: ${Id}`,
+        });
+      }
+      res.status(200).json({ message: "Product updated successfully" });
+    } catch (error) {
+     
+      res.status(500).json({
+        message: "Something went wrong",
+        error: error.message,
+      });
+    }
+  };
+

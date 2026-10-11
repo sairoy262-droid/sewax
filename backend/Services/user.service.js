@@ -24,3 +24,11 @@ export const LoginUser = async (email) => {
   ]);
   return rows[0];
 };
+export const Updateuser = async (Id,fields) => {
+   const columns = Object.keys(fields);
+  const values = Object.values(fields);
+  const setClause = columns.map((col) => `${col}=?`).join(",");
+  const query = `Update users set ${setClause} where Id=? `;
+  const result = await db.query(query, [...values, Id]);
+  return result;
+};
